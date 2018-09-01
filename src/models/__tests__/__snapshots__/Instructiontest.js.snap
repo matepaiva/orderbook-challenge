@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Instruction .constructor() should define fields 1`] = `
+Instruction {
+  "age": Object {
+    "type": [Function],
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+    "unique": true,
+  },
+}
+`;

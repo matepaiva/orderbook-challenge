@@ -1,0 +1,22 @@
+{
+    "extends": [
+        "node"
+    ],
+    "env": {
+        "node": true,
+        "jest": true
+    },
+    "rules": {
+        "import/no-nodejs-modules": "off",
+        "import/no-commonjs": "off",
+        "semi": "error",
+        "comma-dangle": [
+            "error",
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "functions": "never"
+            }
+        ]
+    }
+}

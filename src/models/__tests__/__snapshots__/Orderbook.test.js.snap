@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Orderbook .constructor() should define fields 1`] = `
+Orderbook {
+  "age": Object {
+    "type": [Function],
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+    "unique": true,
+  },
+}
+`;
