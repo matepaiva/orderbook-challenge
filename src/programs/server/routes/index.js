@@ -5,10 +5,10 @@ const { orderbook } = require('../controllers');
 
 module.exports = (app) => {
     // Create a new orderbook
-    app.post('/orderbooks', requiredParams(), orderbook.start);
+    app.post('/orderbooks', requiredParams(['fundAmount']), orderbook.start);
 
     // Rebalance the orderbook, generating a new orderbook from it;
-    app.post('/orderbooks/:id/rebalance', requiredParams(), orderbook.rebalance);
+    app.post('/orderbooks/:id/rebalance', requiredParams(['orderbookId']), orderbook.rebalance);
 
     // Catch 404 and forward to error handler
     app.use((req, res, next) => next(new errors.NotFound()));

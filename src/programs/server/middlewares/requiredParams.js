@@ -7,13 +7,16 @@ module.exports = (requiredParams = []) => (req, res, next) => {
         const missingParams = requiredParams.filter((param) => isNil(params[param]));
 
         if (!isEmpty(missingParams)) {
-            return next(new errors.UnprocessableEntity());
+            const errorMessage = `Missing required parameter(s): ${missingParams.join(', ')}.`;
+
+            return next(new errors.UnprocessableEntity(errorMessage));
         }
 
         res.locals.params = params;
 
         return next();
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };

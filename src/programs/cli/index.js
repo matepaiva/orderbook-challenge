@@ -11,13 +11,14 @@ module.exports = async (program, { rebalance, orderbook: fundAmount }) => {
         program.help();
     }
 
-    const product = rebalance ? 'rebalance' : 'orderbook';
+    const productType = rebalance ? 'rebalance' : 'orderbook';
     const { instructions, orderbookId, portfolioId } = rebalance
         ? await orderbook.rebalance(rebalance)
         : await orderbook.start(fundAmount);
     const csv = orderbook.convertToCsv(instructions);
-    const path = join(ROOT, `${product}Id_${orderbookId}__portfolioId_${portfolioId}.csv`);
+    const filename = orderbook.setFilename(productType, orderbookId, portfolioId, '.csv');
+    const path = join(ROOT, filename);
 
     await writeFileAsync(path, csv);
-    console.log(`The ${product} ${orderbookId} was created at ${path}.`);
+    console.log(`The ${productType} ${orderbookId} was created at ${path}.`);
 };

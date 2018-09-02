@@ -1,14 +1,14 @@
-const logger = require('winston');
+const errors = require('throw.js');
 
 module.exports = (app) => {
     /* eslint-disable-next-line */
     app.use((err, req, res, next) => {
         const env = req.app.get('env');
 
-        logger.error(err);
+        console.log(err);
 
-        if (env !== 'development' && env !== 'test') delete err.stack;
+        const error = err.statusCode ? err : new errors.InternalServerError(err.message);
 
-        res.status(err.statusCode || 500).json(err);
+        res.status(error.statusCode).json(error);
     });
 };
