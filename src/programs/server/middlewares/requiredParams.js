@@ -3,7 +3,7 @@ const errors = require('throw.js');
 
 module.exports = (requiredParams = []) => (req, res, next) => {
     try {
-        const params = { ...req.params, ...req.body, ...req.query };
+        const params = { ...req.body, ...req.query, ...req.params };
         const missingParams = requiredParams.filter((param) => isNil(params[param]));
 
         if (!isEmpty(missingParams)) {
@@ -16,7 +16,6 @@ module.exports = (requiredParams = []) => (req, res, next) => {
 
         return next();
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };

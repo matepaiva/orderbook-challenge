@@ -1,5 +1,4 @@
 const { get } = require('lodash');
-const errors = require('throw.js');
 
 const { orderbook } = require('../../../modules');
 
@@ -11,18 +10,9 @@ module.exports = {
 async function start(req, res, next) {
     try {
         const { fundAmount } = get(res, 'locals.params');
+        const product = await orderbook.start(Number(fundAmount));
 
-        const { orderbookId, portfolioId, instructions } = await orderbook.start(Number(fundAmount));
-
-        res.format({
-            'application/csv': () => {
-                const csv = orderbook.convertToCsv(instructions);
-                const filename = orderbook.setFilename('orderbook', orderbookId, portfolioId, '.csv');
-                res.attachment(filename);
-                res.send(csv);
-            },
-            'application/json': () => res.json({ orderbookId, portfolioId, instructions }),
-        });
+        respond(res, 'orderbook', product);
     } catch (error) {
         next(error);
     }
@@ -30,10 +20,27 @@ async function start(req, res, next) {
 
 async function rebalance(req, res, next) {
     try {
-        const { orderbookId } = get(res, 'locals.params');
+        const { id } = get(res, 'locals.params');
+        const product = await orderbook.rebalance(id);
 
-        res.json({ route: 'rebalance', orderbookId });
+        respond(res, 'rebalance', product);
     } catch (error) {
         next(error);
     }
+}
+
+function respond (res, responseType, {
+    instructions,
+    orderbookId,
+    portfolioId,
+}) {
+    res.format({
+        'text/csv': () => {
+            const csv = orderbook.convertToCsv(instructions);
+            const filename = orderbook.setFilename(responseType, orderbookId, portfolioId, '.csv');
+            res.attachment(filename);
+            res.send(csv);
+        },
+        'application/json': () => res.json({ orderbookId, portfolioId, instructions }),
+    });
 }
