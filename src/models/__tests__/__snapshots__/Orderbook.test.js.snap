@@ -2,13 +2,14 @@
 
 exports[`Orderbook .constructor() should define fields 1`] = `
 Orderbook {
-  "age": Object {
-    "type": [Function],
-  },
-  "name": Object {
+  "fundAmount": Object {
+    "min": 1000,
     "required": true,
     "type": [Function],
-    "unique": true,
+  },
+  "portfolioId": Object {
+    "required": true,
+    "type": [Function],
   },
 }
 `;

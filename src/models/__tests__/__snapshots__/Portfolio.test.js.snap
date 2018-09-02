@@ -2,13 +2,10 @@
 
 exports[`Portfolio .constructor() should define fields 1`] = `
 Portfolio {
-  "age": Object {
-    "type": [Function],
-  },
-  "name": Object {
+  "fundAmount": Object {
+    "min": 1000,
     "required": true,
     "type": [Function],
-    "unique": true,
   },
 }
 `;

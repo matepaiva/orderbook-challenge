@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Instruction .constructor() should define fields 1`] = `
+Instruction {
+  "amount": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "orderbookId": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "price": Object {
+    "min": 0,
+    "required": true,
+    "type": [Function],
+  },
+  "quantity": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "sourceCurrency": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "targetCurrency": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "weight": Object {
+    "max": 1,
+    "min": 0,
+    "required": true,
+    "type": [Function],
+  },
+}
+`;

@@ -49,4 +49,4 @@ class Instruction extends Document {
     }
 }
 
-module.exports = Instruction;
+module.exports = withTimestamps(Instruction);

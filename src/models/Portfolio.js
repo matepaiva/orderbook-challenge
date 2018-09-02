@@ -17,5 +17,4 @@ class Portfolio extends Document {
     }
 }
 
-// module.exports = (Portfolio);
 module.exports = withTimestamps(Portfolio);
