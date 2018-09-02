@@ -1,6 +1,5 @@
 const program = require('commander');
-const server = require('./server');
-const cli = require('./cli');
+const { server, cli } = require('./programs');
 const { connectToDatabase } = require('./services');
 
 const bootstrap = async () => {
@@ -25,6 +24,14 @@ const bootstrap = async () => {
             .action(cli.bind(null, program));
 
         program.parse(process.argv);
+
+
+        const hasCommand = program.args.some((arg) => arg instanceof program.Command);
+
+        // Show help in command line if no valid command is passed as argument.
+        if (!hasCommand) {
+            program.help();
+        }
     } catch (error) {
         console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         console.log(error);
