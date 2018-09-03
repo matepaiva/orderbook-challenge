@@ -6,32 +6,49 @@ module.exports = async (orderbookId) => {
     if (!orderbookId) throw new Error('Orderbook Id is required');
 
     const instructions = await Instruction.find({ orderbookId });
-    const { portfolioId } = await Orderbook.findOne({ _id: orderbookId });
+    const { portfolioId, fundAmount } = (await Orderbook.findOne({ _id: orderbookId }) || {});
+
+    if (!portfolioId) throw new Error('Orderbook not found.');
+
+    // Get updated index of assets
     const index = getIndexFromProvider(true);
     const assets = get(index, 'data[0].assets');
+
+    // Calculate the new fund total based on updated asset prices
     const newFundAmount = getNewFundTotal(instructions, assets);
+
+    if (fundAmount === newFundAmount) throw new Error('Orderbook does not need to rebalance');
+
+    // Evaluate old instructions and generate credits and debits needs.
     const { credits, debits } = evaluateProfits(instructions, assets, newFundAmount);
-    const rebalanceTransactions = getRebalanceTransactions(credits, debits);
+
+    // Create new instructions to clear credits and debits
+    const rebalanceInstructions = getRebalanceInstructions(credits, debits);
+
+    // Update portfolio
     const portfolio = await Portfolio.findOne({ _id: portfolioId });
-
     portfolio.fundAmount = newFundAmount;
-
     await portfolio.save();
 
+    // Create new orderbook and save
     const { _id: newOrderbookId } = await Orderbook.create({
         portfolioId,
         fundAmount: newFundAmount,
     }).save();
 
+    // Save new instructions
+    const newInstructions = await saveInstructions(rebalanceInstructions, newOrderbookId);
 
-    const transactions = await saveTransactions(rebalanceTransactions, newOrderbookId);
-
-    return { instructions: transactions, portfolioId, orderbookId: newOrderbookId };
+    return { instructions: newInstructions, portfolioId, orderbookId: newOrderbookId };
 };
 
-async function saveTransactions(rebalanceTransactions, orderbookId) {
-    return Promise.all(rebalanceTransactions.map(async (transaction) => {
-        const instruction = await Instruction.create({ ...transaction, orderbookId }).save();
+// Save at database for future consumption
+async function saveInstructions(rebalanceInstructions, orderbookId) {
+    return Promise.all(rebalanceInstructions.map(async (instr) => {
+        const instruction = await Instruction.create({
+            ...instr,
+            orderbookId,
+        }).save();
 
         return instruction.toJSON();
     }));
@@ -67,20 +84,26 @@ function evaluateProfits(instructions, assets, newFundAmount) {
     return { credits, debits };
 }
 
-function getRebalanceTransactions(credits, debits) {
-    const transactions = [];
+function getRebalanceInstructions(credits, debits) {
+    const instructions = [];
 
     debits.forEach((debit) => {
         debit.amountDiff = Math.abs(debit.amountDiff);
+
+        // It's necessary to always reorder the credits,
+        // Because its amountDiff changes always that
+        // a debit consumes it (and it happens in each iteration).
         const orderedCredits = orderBy(credits, 'amountDiff', 'desc');
 
+        // Iterate over each credit and consumes its amountDiff
+        // until it zeroes. If necessary, goes to another credit.
         orderedCredits.some((credit) => {
             const amount = Math.min(credit.amountDiff, debit.amountDiff);
 
             credit.amountDiff -= amount;
             debit.amountDiff -= amount;
 
-            transactions.push({
+            instructions.push({
                 ...pick(debit, ['weight', 'price', 'targetCurrency']),
                 sourceCurrency: credit.targetCurrency,
                 amount,
@@ -93,5 +116,5 @@ function getRebalanceTransactions(credits, debits) {
         });
     });
 
-    return transactions;
+    return instructions;
 }

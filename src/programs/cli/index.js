@@ -7,6 +7,8 @@ const writeFileAsync = promisify(writeFile);
 const ROOT = process.cwd();
 
 module.exports = async (program, { rebalance, orderbook: fundAmount }) => {
+    // If no parameter was passed, print --help options
+    // to user and exit program immediatly.
     if (!(rebalance || fundAmount)) {
         program.help();
     }

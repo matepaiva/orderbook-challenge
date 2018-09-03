@@ -15,6 +15,10 @@ module.exports = (target) => {
         }
     }
 
+    // This changes the name of the class dinamically.
+    // It is helpful for debugging, otherwise all Models would
+    // appear to have the same name. If we call withTimestamps(User)
+    // the class name will be User_WithTimestamps.
     Reflect.defineProperty(WithTimestamps, 'name', { value: `${target.name}_${WithTimestamps.name}` });
 
     return WithTimestamps;

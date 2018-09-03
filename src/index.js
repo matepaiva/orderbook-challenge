@@ -7,6 +7,7 @@ const bootstrap = async () => {
         await connectToDatabase();
 
         program
+            .usage('\n npm start -- [options] [command]')
             .version(process.env.npm_package_version);
 
         program
@@ -20,7 +21,7 @@ const bootstrap = async () => {
             .alias('cli')
             .description('Work with orderbooks in command line')
             .option('-o, --orderbook <fund>', 'Create an orderbook according to fund amount', parseInt)
-            .option('-r, --rebalance <orderbookId>', 'Rebalance an orderbook by id')
+            .option('-r, --rebalance <orderbookId>', 'Rebalance an orderbook by id and create a new orderbook')
             .action(cli.bind(null, program));
 
         program.parse(process.argv);

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:server": "npm start -- server",
     "start": "node src",
     "dev": "node --nolazy --inspect-brk=9229 src",
     "test": "jest"
