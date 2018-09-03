@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Convert to CSV should process it with a parser 1`] = `
+Object {
+  "fields": Array [
+    Object {
+      "label": "Name",
+      "value": [Function],
+    },
+    Object {
+      "label": "Trading pair",
+      "value": [Function],
+    },
+    Object {
+      "label": "Weight %",
+      "value": [Function],
+    },
+    Object {
+      "label": "€ Amount",
+      "value": [Function],
+    },
+    Object {
+      "label": "Action",
+      "value": [Function],
+    },
+  ],
+  "instructions": Array [
+    Object {
+      "amount": 37,
+      "sourceCurrency": "BTC",
+      "targetCurrency": "foo",
+      "weight": 0.5,
+    },
+    Object {
+      "amount": -38,
+      "sourceCurrency": "EUR",
+      "targetCurrency": "baz",
+      "weight": 0.5,
+    },
+  ],
+  "parsed": true,
+}
+`;
