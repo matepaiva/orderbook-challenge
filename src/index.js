@@ -33,9 +33,10 @@ const bootstrap = async () => {
             program.help();
         }
     } catch (error) {
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         console.log(error);
     }
 };
 
 bootstrap();
+
+module.exports = bootstrap;

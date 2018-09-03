@@ -3,6 +3,8 @@ const { Orderbook, Instruction, Portfolio } = require('../../models');
 const { getIndexFromProvider } = require('../../services');
 
 module.exports = async (orderbookId) => {
+    if (!orderbookId) throw new Error('Orderbook Id is required');
+
     const instructions = await Instruction.find({ orderbookId });
     const { portfolioId } = await Orderbook.findOne({ _id: orderbookId });
     const index = getIndexFromProvider(true);
@@ -20,6 +22,7 @@ module.exports = async (orderbookId) => {
         portfolioId,
         fundAmount: newFundAmount,
     }).save();
+
 
     const transactions = await saveTransactions(rebalanceTransactions, newOrderbookId);
 
