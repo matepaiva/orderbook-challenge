@@ -9,11 +9,16 @@ module.exports = {
 
 async function start(req, res, next) {
     try {
+        console.log('1');
         const { fundAmount } = get(res, 'locals.params');
+        console.log('2');
         const product = await orderbook.start(Number(fundAmount));
+        console.log('3');
 
         respond(res, 'orderbook', product);
+        console.log('4');
     } catch (error) {
+        console.log(error);
         next(error);
     }
 }

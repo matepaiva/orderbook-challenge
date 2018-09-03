@@ -1,5 +1,5 @@
 const helmet = require('helmet');
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
 
 module.exports = (app) => {
     // Set HTTP headers to secure the requests

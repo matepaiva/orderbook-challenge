@@ -1,8 +1,8 @@
-const express = require("express");
+const express = require('express');
 
-const config = require("./config");
-const routes = require("./routes");
-const errorHandler = require("./error-handler");
+const config = require('./config');
+const routes = require('./routes');
+const errorHandler = require('./error-handler');
 
 module.exports = () => {
     const app = express();
@@ -11,7 +11,7 @@ module.exports = () => {
     routes(app);
     errorHandler(app);
 
-    const server = app.listen(3000, () => {
-        console.log(`>> App running on port ${server.address().port}.`);
-    });
+    app.listen(3000);
+
+    console.log('>> App running on port 3000.');
 };

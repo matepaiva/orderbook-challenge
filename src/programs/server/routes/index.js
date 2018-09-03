@@ -1,7 +1,5 @@
-const errors = require('throw.js');
-
 const { requiredParams } = require('../middlewares');
-const { orderbook } = require('../controllers');
+const { orderbook, notFound } = require('../controllers');
 
 module.exports = (app) => {
     // Create a new orderbook
@@ -11,5 +9,5 @@ module.exports = (app) => {
     app.post('/orderbooks/:id/rebalance', requiredParams(['id']), orderbook.rebalance);
 
     // Catch 404 and forward to error handler
-    app.use((req, res, next) => next(new errors.NotFound()));
+    app.use(notFound);
 };
