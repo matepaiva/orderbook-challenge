@@ -49,7 +49,11 @@ Options:
 -h, --help                     output usage information
 ```
 
-Either option will save a new orderbook csv file to the root of this project. The orderbook id is the first one in the name of the file.
+Either option will save a new orderbook csv file to the root of this project.
+
+At the end, it will be displayed the id of the generated orderbook. Also, the orderbook id is the first one in the name of the file.
+
+You must provide that orderbook id later to rebalance it.
 
 ### Server
 
@@ -75,13 +79,24 @@ Alias: `npm run start:server`.
     fundAmount=12345678123123123
     ```
 
+    You will need the orderbook id to rebalance it in the next endpoint. If you are receiving a JSON, you will have the orderbookId in the response. If you are downloading a CSV file, look at the response headers. The `Content-Disposition` header has the name of the file, and that name is composed with the orderbook id.
+
+    Example:
+    ```
+        content-disposition = attachment; filename="orderbookId_f9Q3rXB2NNGpcLOK__portfolioId_dZlN7iMZtH1Cq94q.csv" // the orderbook id is f9Q3rXB2NNGpcLOK
+    ```
+
+    At the end, it will be displayed the id of the generated orderbook. Also, the orderbook id is the first one in the name of the file.
+
+    You must provide that orderbook id later to rebalance it.
+
 - `[POST] /orderbooks/:orderbookId/rebalance`
 
     Create a new orderbook as a result of the reference orderbook rebalance. Required parameter: `orderbookId`.
 
     Example:
     ```
-    POST /orderbooks/sdkWZmLORJPIF6WU/rebalance HTTP/1.1
+    POST /orderbooks/f9Q3rXB2NNGpcLOK/rebalance HTTP/1.1
     Host: localhost:3000
     Content-Type: application/x-www-form-urlencoded
     Accept: application/json
